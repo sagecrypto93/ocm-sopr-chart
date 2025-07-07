@@ -1,46 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OCM SOPR Chart</title>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-</head>
-<body style="margin:0;background-color:#18181D;color:white;font-family:Inter,sans-serif;">
-  <div id="chart" style="width:100%;max-width:900px;height:500px;margin:auto;"></div>
+fetch(endpoint)
+  .then(res => res.json())
+  .then(result => {
+    console.log("API result:", result);  // <-- Add this line to see what data looks like
 
-  <script>
-    const endpoint = "/api/sopr";
+    const data = result.data;
+    if (!data) {
+      document.getElementById("chart").innerHTML = `<p style="color:red;text-align:center">No data found.</p>`;
+      return;
+    }
 
-    fetch(endpoint)
-      .then(res => res.json())
-      .then(result => {
-        const data = result.data;
-        const entries = Object.entries(data).sort(([a], [b]) => new Date(a) - new Date(b));
-        const x = entries.map(([date]) => date);
-        const y = entries.map(([_, val]) => val);
+    const entries = Object.entries(data).sort(([a], [b]) => new Date(a) - new Date(b));
+    const x = entries.map(([date]) => date);
+    const y = entries.map(([_, val]) => val);
 
-        Plotly.newPlot("chart", [{
-          x: x,
-          y: y,
-          type: "scatter",
-          mode: "lines",
-          line: { color: "#1F7120", width: 2 },
-          name: "SOPR"
-        }], {
-          paper_bgcolor: "#18181D",
-          plot_bgcolor: "#18181D",
-          font: { color: "white" },
-          xaxis: { gridcolor: "#212127", zerolinecolor: "#212127" },
-          yaxis: { gridcolor: "#212127", zerolinecolor: "#212127" },
-          margin: { t: 10, b: 50 },
-          legend: { orientation: "h", x: 0.5, xanchor: "center", y: -0.2 }
-        });
-      })
-      .catch(err => {
-        document.getElementById("chart").innerHTML = `<p style="color:red;text-align:center">Failed to load data.</p>`;
-        console.error(err);
-      });
-  </script>
-</body>
-</html>
+    Plotly.newPlot("chart", [{
+      x: x,
+      y: y,
+      type: "scatter",
+      mode: "lines",
+      line: { color: "#1F7120", width: 2 },
+      name: "SOPR"
+    }], {
+      paper_bgcolor: "#18181D",
+      plot_bgcolor: "#18181D",
+      font: { color: "white" },
+      xaxis: { gridcolor: "#212127", zerolinecolor: "#212127" },
+      yaxis: { gridcolor: "#212127", zerolinecolor: "#212127" },
+      margin: { t: 10, b: 50 },
+      legend: { orientation: "h", x: 0.5, xanchor: "center", y: -0.2 }
+    });
+  })
+  .catch(err => {
+    document.getElementById("chart").innerHTML = `<p style="color:red;text-align:center">Failed to load data.</p>`;
+    console.error(err);
+  });
