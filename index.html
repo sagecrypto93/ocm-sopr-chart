@@ -3,34 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OCM SOPR Chart - Raw Data</title>
-  <style>
-    body {
-      margin: 0;
-      background-color: #18181D;
-      color: white;
-      font-family: Inter, sans-serif;
-      padding: 20px;
-    }
-    #chart {
-      max-height: 400px;
-      overflow: auto;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-  </style>
+  <title>OCM SOPR Chart</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
-<body>
-  <div id="chart">Loading data...</div>
+<body style="margin:0;background-color:#18181D;color:white;font-family:Inter,sans-serif;">
+  <div id="chart" style="width:100%;max-width:900px;height:500px;margin:auto;"></div>
 
   <script>
     fetch("/api/sopr")
       .then(res => res.json())
       .then(result => {
-        document.getElementById("chart").textContent = JSON.stringify(result, null, 2);
+        const data = result; // Array of objects with date and sopr
+
+        const x = data.map(item => item.date);
+        const y = data.map(item => item.sopr);
+
+        Plotly.newPlot("chart", [{
+          x: x,
+          y: y,
+          type: "scatter",
+          mode: "lines",
+          line: { color: "#1F7120", width: 2 },
+          name: "SOPR"
+        }], {
+          paper_bgcolor: "#18181D",
+          plot_bgcolor: "#18181D",
+          font: { color: "white" },
+          xaxis: { gridcolor: "#212127", zerolinecolor: "#212127" },
+          yaxis: { gridcolor: "#212127", zerolinecolor: "#212127" },
+          margin: { t: 10, b: 50 },
+          legend: { orientation: "h", x: 0.5, xanchor: "center", y: -0.2 }
+        });
       })
       .catch(() => {
-        document.getElementById("chart").textContent = "Failed to load data.";
+        document.getElementById("chart").innerHTML = `<p style="color:red;text-align:center">Failed to load data.</p>`;
       });
   </script>
 </body>
