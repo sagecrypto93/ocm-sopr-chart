@@ -15,7 +15,7 @@
       .then(result => {
         const data = result.data;
         const x = data.map(item => item.date);
-        const y = data.map(item => item.realized_profit); // adjust if your API uses a different field name
+        const y = data.map(item => item.realized_profit);
 
         Plotly.newPlot("chart", [{
           x: x,
