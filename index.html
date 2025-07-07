@@ -13,7 +13,7 @@
     fetch("/api/sopr")
       .then(res => res.json())
       .then(result => {
-        const data = result; // Array of objects with date and sopr
+        const data = result.data; // Get the array from the API response
 
         const x = data.map(item => item.date);
         const y = data.map(item => item.sopr);
