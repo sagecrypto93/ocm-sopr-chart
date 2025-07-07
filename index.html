@@ -10,15 +10,9 @@
   <div id="chart" style="width:100%;max-width:900px;height:500px;margin:auto;"></div>
 
   <script>
-    const token = "0d866412-d29c-41ed-a044-7be4fb52478a";
-    const endpoint = "https://api.researchbitcoin.net/v1/spent_output_profit_ratio/sopr";
-    const params = new URLSearchParams({
-      token: token,
-      date_field: "2023-01-01",
-      output_format: "json"
-    });
+    const endpoint = "/api/sopr";
 
-    fetch(`${endpoint}?${params}`)
+    fetch(endpoint)
       .then(res => res.json())
       .then(result => {
         const data = result.data;
