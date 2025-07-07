@@ -1,36 +1,14 @@
-fetch(endpoint)
-  .then(res => res.json())
-  .then(result => {
-    console.log("API result:", result);  // <-- Add this line to see what data looks like
-
-    const data = result.data;
-    if (!data) {
-      document.getElementById("chart").innerHTML = `<p style="color:red;text-align:center">No data found.</p>`;
-      return;
-    }
-
-    const entries = Object.entries(data).sort(([a], [b]) => new Date(a) - new Date(b));
-    const x = entries.map(([date]) => date);
-    const y = entries.map(([_, val]) => val);
-
-    Plotly.newPlot("chart", [{
-      x: x,
-      y: y,
-      type: "scatter",
-      mode: "lines",
-      line: { color: "#1F7120", width: 2 },
-      name: "SOPR"
-    }], {
-      paper_bgcolor: "#18181D",
-      plot_bgcolor: "#18181D",
-      font: { color: "white" },
-      xaxis: { gridcolor: "#212127", zerolinecolor: "#212127" },
-      yaxis: { gridcolor: "#212127", zerolinecolor: "#212127" },
-      margin: { t: 10, b: 50 },
-      legend: { orientation: "h", x: 0.5, xanchor: "center", y: -0.2 }
+<script>
+  fetch("/api/sopr")
+    .then(res => res.json())
+    .then(result => {
+      document.getElementById("chart").innerHTML = `
+        <pre style="color:white; max-height: 400px; overflow: auto;">
+          ${JSON.stringify(result, null, 2)}
+        </pre>`;
+    })
+    .catch(() => {
+      document.getElementById("chart").innerHTML = `
+        <p style="color:red;text-align:center">Failed to load data.</p>`;
     });
-  })
-  .catch(err => {
-    document.getElementById("chart").innerHTML = `<p style="color:red;text-align:center">Failed to load data.</p>`;
-    console.error(err);
-  });
+</script>
