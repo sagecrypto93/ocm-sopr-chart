@@ -1,14 +1,37 @@
-<script>
-  fetch("/api/sopr")
-    .then(res => res.json())
-    .then(result => {
-      document.getElementById("chart").innerHTML = `
-        <pre style="color:white; max-height: 400px; overflow: auto;">
-          ${JSON.stringify(result, null, 2)}
-        </pre>`;
-    })
-    .catch(() => {
-      document.getElementById("chart").innerHTML = `
-        <p style="color:red;text-align:center">Failed to load data.</p>`;
-    });
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OCM SOPR Chart - Raw Data</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #18181D;
+      color: white;
+      font-family: Inter, sans-serif;
+      padding: 20px;
+    }
+    #chart {
+      max-height: 400px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div id="chart">Loading data...</div>
+
+  <script>
+    fetch("/api/sopr")
+      .then(res => res.json())
+      .then(result => {
+        document.getElementById("chart").textContent = JSON.stringify(result, null, 2);
+      })
+      .catch(() => {
+        document.getElementById("chart").textContent = "Failed to load data.";
+      });
+  </script>
+</body>
+</html>
